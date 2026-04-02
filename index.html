@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Weekify | Eternal Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    borderRadius: { '4xl': '2rem' }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card:active { transform: scale(0.96); opacity: 0.8; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .not-italic { font-style: normal !important; }
+        /* Smooth for manual "Today" click, but we'll disable it for initial load */
+        .scroll-smooth { scroll-behavior: smooth; }
+        .scroll-auto { scroll-behavior: auto; }
+    </style>
+</head>
+<body class="bg-white dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-300 min-h-screen">
+
+    <div id="main-screen" class="max-w-md mx-auto px-6 pt-10 pb-10 space-y-6">
+        <header class="flex justify-between items-start mb-8">
+            <div>
+                <h1 class="text-4xl font-extrabold tracking-tighter not-italic text-black dark:text-white">Weekify</h1>
+                <p class="text-indigo-500 font-bold text-xs uppercase tracking-widest mt-1 not-italic">Current week and day</p>
+            </div>
+            <button id="themeToggle" class="p-3 rounded-2xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-sm active:scale-90 transition-transform">
+                <span id="themeIcon">☀️</span>
+            </button>
+        </header>
+        
+        <div onclick="showScreen('week-screen')" class="card bg-white dark:bg-zinc-900 p-8 rounded-4xl shadow-xl border border-slate-100 dark:border-zinc-800 cursor-pointer text-center relative overflow-hidden">
+            <p class="text-xs uppercase tracking-[0.2em] text-indigo-500 font-bold mb-4 not-italic">Week of Year</p>
+            <div class="flex items-baseline justify-center gap-2">
+                <p id="week-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
+                <p class="text-2xl text-slate-300 dark:text-zinc-600 font-light not-italic">/ 52</p>
+            </div>
+            <span class="absolute bottom-6 right-8 text-slate-200 dark:text-zinc-800 text-xl font-bold">→</span>
+        </div>
+
+        <div onclick="showScreen('day-screen')" class="card bg-white dark:bg-zinc-900 p-8 rounded-4xl shadow-xl border border-slate-100 dark:border-zinc-800 cursor-pointer text-center relative overflow-hidden">
+            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-bold mb-4 not-italic">Day of Year</p>
+            <div class="flex items-baseline justify-center gap-2">
+                <p id="day-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
+                <p id="total-days-label" class="text-2xl text-slate-300 dark:text-zinc-600 font-light not-italic">/ 365</p>
+            </div>
+            <span class="absolute bottom-6 right-8 text-slate-200 dark:text-zinc-800 text-xl font-bold">→</span>
+        </div>
+
+        <div class="p-4 border border-dashed border-slate-200 dark:border-zinc-800 rounded-3xl text-center text-slate-300 dark:text-zinc-700 text-[10px] uppercase tracking-[0.3em]">
+            Advertisement Space
+        </div>
+    </div>
+
+    <div id="scroll-view" class="max-w-md mx-auto px-4 pt-8 pb-10 hidden opacity-0 transition-opacity duration-200">
+        <div class="flex justify-between items-center mb-6">
+            <button onclick="showScreen('main')" class="py-3 px-6 bg-slate-100 dark:bg-zinc-900 rounded-2xl text-sm font-bold border border-slate-200 dark:border-zinc-800 active:scale-95 transition-transform flex items-center gap-2">
+                <span>←</span> Back
+            </button>
+            <button onclick="scrollToToday(true)" class="py-3 px-6 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform">Today</button>
+        </div>
+
+        <div class="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-zinc-800 overflow-hidden">
+            <div class="p-6 border-b dark:border-zinc-800 flex justify-between items-center bg-slate-50/50 dark:bg-zinc-800/30">
+                <h2 id="view-title" class="text-xl font-black tracking-tight uppercase not-italic">Archive</h2>
+            </div>
+            <div id="list-container" class="max-h-[75vh] overflow-y-auto no-scrollbar">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        const now = new Date();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        function getISOWeek(d) {
+            const date = new Date(d.getTime());
+            date.setHours(0, 0, 0, 0);
+            date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+            const week1 = new Date(date.getFullYear(), 0, 4);
+            return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+        }
+
+        const isLeap = (y) => (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+
+        // Dashboard Init
+        document.getElementById('week-number').innerText = getISOWeek(now);
+        document.getElementById('day-number').innerText = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+        document.getElementById('total-days-label').innerText = `/ ${isLeap(now.getFullYear()) ? 366 : 365}`;
+
+        function showScreen(type) {
+            const main = document.getElementById('main-screen');
+            const scroll = document.getElementById('scroll-view');
+            const container = document.getElementById('list-container');
+
+            if (type === 'main') {
+                main.classList.remove('hidden');
+                scroll.classList.add('hidden');
+                scroll.classList.add('opacity-0');
+            } else {
+                main.classList.add('hidden');
+                scroll.classList.remove('hidden');
+                
+                // 1. Render content
+                renderArchive(type);
+                
+                // 2. Immediate jump (no smooth scroll)
+                container.classList.remove('scroll-smooth');
+                container.classList.add('scroll-auto');
+                
+                const activeItem = document.getElementById('active-item');
+                if (activeItem) {
+                    activeItem.scrollIntoView({ block: 'center' });
+                }
+                
+                // 3. Reveal screen once positioned
+                setTimeout(() => {
+                    scroll.classList.remove('opacity-0');
+                    container.classList.remove('scroll-auto');
+                    container.classList.add('scroll-smooth');
+                }, 50);
+            }
+        }
+
+        function scrollToToday(smooth = true) {
+            const container = document.getElementById('list-container');
+            const activeItem = document.getElementById('active-item');
+            if (activeItem) {
+                if (!smooth) container.classList.add('scroll-auto');
+                activeItem.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'center' });
+                if (!smooth) container.classList.remove('scroll-auto');
+            }
+        }
+
+        function renderArchive(type) {
+            const container = document.getElementById('list-container');
+            const title = document.getElementById('view-title');
+            container.innerHTML = '';
+            let html = '';
+
+            if (type === 'week-screen') {
+                title.innerText = 'Week Archive';
+                for (let y = 2020; y <= 2035; y++) {
+                    for (let m = 0; m < 12; m++) {
+                        html += `<div class="p-4 pt-8 text-center font-black text-sm uppercase tracking-widest text-slate-400 dark:text-zinc-600 border-t dark:border-zinc-800">${monthNames[m]} ${y}</div>`;
+                        html += `<div class="grid grid-cols-8 gap-1 p-4 text-[9px] font-black text-center opacity-40"><div>MO</div><div>TU</div><div>WE</div><div>TH</div><div>FR</div><div>SA</div><div>SU</div><div class="text-indigo-400">WK</div></div>`;
+                        html += `<div class="grid grid-cols-8 gap-x-1 gap-y-2.5 p-4 pt-0 text-center text-xs">`;
+                        
+                        let firstDay = new Date(y, m, 1);
+                        let offset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+                        let lastDay = new Date(y, m + 1, 0);
+                        let prevLast = new Date(y, m, 0).getDate();
+
+                        for (let i = offset - 1; i >= 0; i--) html += `<div class="py-2 text-zinc-700 dark:text-zinc-800 opacity-20">${prevLast - i}</div>`;
+
+                        for (let d = 1; d <= lastDay.getDate(); d++) {
+                            let curr = new Date(y, m, d);
+                            let isToday = curr.toDateString() === now.toDateString();
+                            let style = isToday ? 'bg-indigo-600 text-white rounded-xl font-bold shadow-lg' : 'dark:text-zinc-300';
+                            html += `<div id="${isToday ? 'active-item' : ''}" class="py-2 flex items-center justify-center ${style}">${d}</div>`;
+                            
+                            if (curr.getDay() === 0 || d === lastDay.getDate()) {
+                                if (d === lastDay.getDate()) {
+                                    let fill = 7 - (curr.getDay() === 0 ? 7 : curr.getDay());
+                                    for(let f=1; f<=fill; f++) html += `<div class="py-2 text-zinc-700 dark:text-zinc-800 opacity-20">${f}</div>`;
+                                }
+                                html += `<div class="py-2 bg-zinc-800/40 text-indigo-400 font-bold rounded-xl flex items-center justify-center">${getISOWeek(curr)}</div>`;
+                            }
+                        }
+                        html += `</div>`;
+                    }
+                }
+            } else {
+                title.innerText = 'Day Archive';
+                for (let y = 2024; y <= 2028; y++) {
+                    const days = isLeap(y) ? 366 : 365;
+                    for (let i = 1; i <= days; i++) {
+                        let d = new Date(y, 0, i);
+                        let isToday = d.toDateString() === now.toDateString();
+                        html += `
+                            <div id="${isToday ? 'active-item' : ''}" class="flex items-center justify-between p-5 border-b dark:border-zinc-800/50 ${isToday ? 'bg-emerald-500/10 text-emerald-500 font-bold border-l-4 border-emerald-500' : 'text-slate-500 dark:text-zinc-400'}">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-[10px] font-mono opacity-40">#${i}</span>
+                                    <span class="text-[10px] font-bold opacity-30 tracking-widest">${y}</span>
+                                </div>
+                                <div class="text-right uppercase tracking-tight font-bold text-xs">
+                                    ${d.getDate().toString().padStart(2, '0')} ${monthNames[d.getMonth()]} ${y}
+                                </div>
+                            </div>`;
+                    }
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
+            localStorage.theme = isDark ? 'dark' : 'light';
+        });
+        if (localStorage.theme === 'light') { document.documentElement.classList.remove('dark'); document.getElementById('themeIcon').innerText = '🌙'; }
+    </script>
+</body>
+</html>
