@@ -7,6 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4310805868565928" crossorigin="anonymous"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, borderRadius: { '4xl': '2rem' } } } }
@@ -19,22 +22,21 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .not-italic { font-style: normal !important; }
-        .privacy-text p { margin-bottom: 1rem; }
     </style>
 </head>
 <body class="bg-white dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-300 min-h-screen">
 
     <div id="main-screen" class="max-w-md mx-auto px-6 pt-10 space-y-6">
-        <header class="flex justify-between items-start mb-8">
+        <header class="flex justify-between items-start mb-8 text-black dark:text-white">
             <div>
-                <h1 class="text-4xl font-black tracking-tighter not-italic text-black dark:text-white uppercase">Weekify</h1>
+                <h1 class="text-4xl font-black tracking-tighter not-italic uppercase">Weekify</h1>
                 <p class="text-indigo-500 font-bold text-xs uppercase tracking-widest mt-1 not-italic">Current week and day</p>
             </div>
             <button id="themeToggle" class="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-sm"><span id="themeIcon">☀️</span></button>
         </header>
         
         <div onclick="showScreen('week-screen')" class="card bg-zinc-900 p-8 rounded-4xl border border-zinc-800 cursor-pointer text-center relative overflow-hidden">
-            <p class="text-xs uppercase tracking-[0.2em] text-indigo-500 font-bold mb-4 not-italic text-center text-center">Week of Year</p>
+            <p class="text-xs uppercase tracking-[0.2em] text-indigo-500 font-bold mb-4 not-italic">Week of Year</p>
             <div class="flex items-baseline justify-center gap-2">
                 <p id="week-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
                 <p class="text-2xl text-zinc-600 font-light not-italic">/ 52</p>
@@ -43,7 +45,7 @@
         </div>
 
         <div onclick="showScreen('day-screen')" class="card bg-zinc-900 p-8 rounded-4xl border border-zinc-800 cursor-pointer text-center relative overflow-hidden">
-            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-bold mb-4 not-italic text-center text-center">Day of Year</p>
+            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-bold mb-4 not-italic">Day of Year</p>
             <div class="flex items-baseline justify-center gap-2">
                 <p id="day-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
                 <p id="total-days-label" class="text-2xl text-zinc-600 font-light not-italic">/ 365</p>
@@ -51,25 +53,29 @@
             <span class="absolute bottom-6 right-8 text-zinc-800 text-xl font-bold">→</span>
         </div>
 
-        <div class="p-8 border border-dashed border-zinc-800 rounded-3xl text-center text-zinc-700 text-[10px] uppercase tracking-[0.3em] min-h-[120px] flex items-center justify-center">
-            Advertisement Space
+        <div class="p-2 border border-dashed border-zinc-800 rounded-3xl overflow-hidden bg-zinc-950/50">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4310805868565928"
+                 data-ad-slot="8294367144"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
         <footer class="mt-8 pb-6 text-center">
-            <button onclick="showPrivacy()" class="text-[10px] text-zinc-700 uppercase tracking-widest hover:text-zinc-500 transition-colors">
-                Privacy Policy
-            </button>
+            <button onclick="showPrivacy()" class="text-[10px] text-zinc-700 uppercase tracking-widest hover:text-zinc-500 transition-colors">Privacy Policy</button>
         </footer>
     </div>
 
-    <div id="scroll-view" class="max-w-md mx-auto px-4 pt-8 pb-10 hidden opacity-0">
+    <div id="scroll-view" class="max-w-md mx-auto px-4 pt-8 pb-10 hidden opacity-0 transition-opacity duration-200">
         <div class="flex justify-between items-center mb-6">
             <button onclick="showScreen('main')" class="py-3 px-6 bg-zinc-900 rounded-2xl text-sm font-bold border border-zinc-800">← Back</button>
             <button id="todayBtn" class="py-3 px-6 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform">Today</button>
         </div>
         <div class="bg-zinc-900 rounded-[2.5rem] border border-zinc-800 overflow-hidden">
             <div class="p-6 border-b border-zinc-800 bg-zinc-800/30">
-                <h2 id="view-title" class="text-xl font-black tracking-tight uppercase not-italic italic">Archive</h2>
+                <h2 id="view-title" class="text-xl font-black tracking-tight uppercase not-italic">Archive</h2>
             </div>
             <div id="list-container" class="max-h-[75vh] overflow-y-auto no-scrollbar"></div>
         </div>
@@ -77,12 +83,10 @@
 
     <div id="privacy-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closePrivacy()"></div>
-        <div class="relative bg-zinc-900 border border-zinc-800 p-8 rounded-4xl max-w-sm w-full max-h-[80vh] overflow-y-auto no-scrollbar">
+        <div class="relative bg-zinc-900 border border-zinc-800 p-8 rounded-4xl max-w-sm w-full">
             <h3 class="text-xl font-black mb-4 uppercase tracking-tight not-italic">Privacy Policy</h3>
-            <div class="text-xs text-zinc-400 leading-relaxed privacy-text">
-                <p>This app uses Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to this or other websites.</p>
-                <p>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the Internet.</p>
-                <p>You may opt out of personalized advertising by visiting aboutads.info.</p>
+            <div class="text-xs text-zinc-400 leading-relaxed space-y-4">
+                <p>This app uses Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits.</p>
                 <p>We do not collect or store any personal identification data from our users directly.</p>
             </div>
             <button onclick="closePrivacy()" class="mt-8 w-full py-4 bg-white text-black rounded-2xl font-bold uppercase text-xs tracking-widest">Close</button>
@@ -120,22 +124,17 @@
                 scroll.classList.remove('hidden');
                 renderArchive(type);
                 
-                // Disable smooth scroll for instant jump
-                container.style.scrollBehavior = 'auto';
-                
+                container.style.scrollBehavior = 'auto'; // Disable smooth for instant jump
                 const activeItem = document.getElementById('active-item');
-                if (activeItem) {
-                    activeItem.scrollIntoView({ block: 'center' });
-                }
+                if (activeItem) { activeItem.scrollIntoView({ block: 'center' }); }
                 
-                // Set the Today button to use smooth scroll later
+                scroll.classList.remove('opacity-0');
+
                 document.getElementById('todayBtn').onclick = () => {
                     container.style.scrollBehavior = 'smooth';
                     activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => container.style.scrollBehavior = 'auto', 1000);
                 };
-
-                // Instant reveal
-                scroll.classList.remove('opacity-0');
             }
         }
 
@@ -175,7 +174,7 @@
                     for (let i = 1; i <= days; i++) {
                         let d = new Date(y, 0, i);
                         let isToday = d.toDateString() === now.toDateString();
-                        html += `<div id="${isToday ? 'active-item' : ''}" class="flex items-center justify-between p-5 border-b border-zinc-800/50 ${isToday ? 'bg-emerald-500/10 text-emerald-500 font-bold border-l-4 border-emerald-500' : 'text-zinc-500'}"><div class="flex items-center gap-4"><span class="text-[10px] font-mono opacity-40">#${i}</span><span class="text-[10px] font-bold opacity-30 tracking-widest">${y}</span></div><div class="text-right uppercase tracking-tight font-bold text-xs">${d.getDate().toString().padStart(2, '0')} ${monthNames[d.getMonth()]} ${y}</div></div>`;
+                        html += `<div id="${isToday ? 'active-item' : ''}" class="flex items-center justify-between p-5 border-b border-zinc-800/50 ${isToday ? 'bg-emerald-500/10 text-emerald-500 font-bold border-l-4 border-emerald-500' : 'text-zinc-500'}"><div class="flex items-center gap-4"><span class="text-[10px] font-mono opacity-40">#${i}</span><span class="text-[10px] font-bold opacity-30 tracking-widest uppercase">${y}</span></div><div class="text-right uppercase tracking-tight font-bold text-xs">${d.getDate().toString().padStart(2, '0')} ${monthNames[d.getMonth()]} ${y}</div></div>`;
                     }
                 }
             }
@@ -186,9 +185,7 @@
         function closePrivacy() { document.getElementById('privacy-modal').classList.add('hidden'); }
 
         const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-        });
+        themeToggle.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); });
     </script>
 </body>
 </html>
