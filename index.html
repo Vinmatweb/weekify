@@ -4,188 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Weekify</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#000000">
-
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4310805868565928" crossorigin="anonymous"></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, borderRadius: { '4xl': '2rem' } } } }
+        tailwind.config = { darkMode: 'class', theme: { extend: { borderRadius: { '4xl': '2rem' } } } }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .card { transition: all 0.2s ease; }
-        .card:active { transform: scale(0.96); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .not-italic { font-style: normal !important; }
     </style>
 </head>
-<body class="bg-white dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-300 min-h-screen">
+<body class="bg-slate-50 dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-200 min-h-screen">
 
     <div id="main-screen" class="max-w-md mx-auto px-6 pt-10 space-y-6">
-        <header class="flex justify-between items-start mb-8 text-black dark:text-white">
-            <div>
-                <h1 class="text-4xl font-black tracking-tighter not-italic uppercase">Weekify</h1>
-                <p class="text-indigo-500 font-bold text-xs uppercase tracking-widest mt-1 not-italic">Current week and day</p>
+        <header class="flex justify-between items-start mb-8">
+            <div class="not-italic">
+                <h1 class="text-4xl font-black tracking-tighter uppercase dark:text-white text-black">Weekify</h1>
+                <p class="text-indigo-500 font-bold text-xs uppercase tracking-widest mt-1">Status</p>
             </div>
-            <button id="themeToggle" class="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-sm"><span id="themeIcon">☀️</span></button>
+            <button id="themeToggle" class="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-sm"><span id="themeIcon">☀️</span></button>
         </header>
         
-        <div onclick="showScreen('week-screen')" class="card bg-zinc-900 p-8 rounded-4xl border border-zinc-800 cursor-pointer text-center relative overflow-hidden">
-            <p class="text-xs uppercase tracking-[0.2em] text-indigo-500 font-bold mb-4 not-italic">Week of Year</p>
-            <div class="flex items-baseline justify-center gap-2">
-                <p id="week-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
-                <p class="text-2xl text-zinc-600 font-light not-italic">/ 52</p>
+        <div onclick="showScreen('week')" class="card bg-white dark:bg-zinc-900 p-8 rounded-4xl border border-slate-200 dark:border-zinc-800 cursor-pointer text-center relative overflow-hidden shadow-sm active:scale-95 transition-transform">
+            <p class="text-xs uppercase tracking-[0.2em] text-indigo-500 font-bold mb-4 not-italic">Week</p>
+            <div class="flex items-baseline justify-center gap-2 not-italic">
+                <p id="week-number" class="text-8xl font-black tracking-tighter">--</p>
+                <p class="text-2xl text-slate-400 dark:text-zinc-600 font-light">/ 52</p>
             </div>
-            <span class="absolute bottom-6 right-8 text-zinc-800 text-xl font-bold">→</span>
         </div>
 
-        <div onclick="showScreen('day-screen')" class="card bg-zinc-900 p-8 rounded-4xl border border-zinc-800 cursor-pointer text-center relative overflow-hidden">
-            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-bold mb-4 not-italic">Day of Year</p>
-            <div class="flex items-baseline justify-center gap-2">
-                <p id="day-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
-                <p id="total-days-label" class="text-2xl text-zinc-600 font-light not-italic">/ 365</p>
+        <div onclick="showScreen('day')" class="card bg-white dark:bg-zinc-900 p-8 rounded-4xl border border-slate-200 dark:border-zinc-800 cursor-pointer text-center relative overflow-hidden shadow-sm active:scale-95 transition-transform">
+            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-bold mb-4 not-italic">Day</p>
+            <div class="flex items-baseline justify-center gap-2 not-italic">
+                <p id="day-number" class="text-8xl font-black tracking-tighter">--</p>
+                <p id="total-days-label" class="text-2xl text-slate-400 dark:text-zinc-600 font-light">/ 365</p>
             </div>
-            <span class="absolute bottom-6 right-8 text-zinc-800 text-xl font-bold">→</span>
         </div>
 
-        <div class="p-2 border border-dashed border-zinc-800 rounded-3xl overflow-hidden bg-zinc-950/50">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-4310805868565928"
-                 data-ad-slot="8294367144"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
+        <div class="p-2 border border-dashed border-slate-300 dark:border-zinc-800 rounded-3xl overflow-hidden bg-white/50 dark:bg-zinc-950/50 min-h-[100px]">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4310805868565928" data-ad-slot="8294367144" data-ad-format="auto" data-full-width-responsive="true"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
         <footer class="mt-8 pb-6 text-center">
-            <button onclick="showPrivacy()" class="text-[10px] text-zinc-700 uppercase tracking-widest hover:text-zinc-500 transition-colors">Privacy Policy</button>
+            <button onclick="document.getElementById('privacy-modal').classList.remove('hidden')" class="text-[10px] text-slate-400 dark:text-zinc-700 uppercase tracking-widest font-bold">Privacy Policy</button>
         </footer>
     </div>
 
-    <div id="scroll-view" class="max-w-md mx-auto px-4 pt-8 pb-10 hidden opacity-0 transition-opacity duration-200">
+    <div id="scroll-view" class="max-w-md mx-auto px-4 pt-8 pb-10 hidden">
         <div class="flex justify-between items-center mb-6">
-            <button onclick="showScreen('main')" class="py-3 px-6 bg-zinc-900 rounded-2xl text-sm font-bold border border-zinc-800">← Back</button>
-            <button id="todayBtn" class="py-3 px-6 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform">Today</button>
+            <button onclick="showScreen('main')" class="py-3 px-6 bg-white dark:bg-zinc-900 rounded-2xl text-sm font-bold border border-slate-200 dark:border-zinc-800 dark:text-white">← Back</button>
+            <button id="todayBtn" class="py-3 px-6 bg-indigo-600 text-white rounded-2xl text-sm font-bold">Today</button>
         </div>
-        <div class="bg-zinc-900 rounded-[2.5rem] border border-zinc-800 overflow-hidden">
-            <div class="p-6 border-b border-zinc-800 bg-zinc-800/30">
-                <h2 id="view-title" class="text-xl font-black tracking-tight uppercase not-italic">Archive</h2>
+        <div class="bg-white dark:bg-zinc-900 rounded-4xl border border-slate-200 dark:border-zinc-800 overflow-hidden shadow-xl">
+            <div class="p-6 border-b border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/30">
+                <h2 id="view-title" class="text-xl font-black uppercase tracking-tight not-italic dark:text-white">Archive</h2>
             </div>
-            <div id="list-container" class="max-h-[75vh] overflow-y-auto no-scrollbar"></div>
+            <div id="list-container" class="max-h-[70vh] overflow-y-auto no-scrollbar scroll-auto"></div>
         </div>
     </div>
 
     <div id="privacy-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closePrivacy()"></div>
-        <div class="relative bg-zinc-900 border border-zinc-800 p-8 rounded-4xl max-w-sm w-full">
-            <h3 class="text-xl font-black mb-4 uppercase tracking-tight not-italic">Privacy Policy</h3>
-            <div class="text-xs text-zinc-400 leading-relaxed space-y-4">
-                <p>This app uses Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits.</p>
-                <p>We do not collect or store any personal identification data from our users directly.</p>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="this.parentElement.classList.add('hidden')"></div>
+        <div class="relative bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-4xl max-w-sm w-full shadow-2xl">
+            <h3 class="text-xl font-black mb-4 uppercase not-italic dark:text-white text-black">Privacy Policy</h3>
+            <div class="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed not-italic space-y-3">
+                <p>This app uses Google AdSense to display ads. Google may use cookies to serve ads based on your visits.</p>
+                <p>No personal data is stored directly by Weekify.</p>
             </div>
-            <button onclick="closePrivacy()" class="mt-8 w-full py-4 bg-white text-black rounded-2xl font-bold uppercase text-xs tracking-widest">Close</button>
+            <button onclick="this.closest('#privacy-modal').classList.add('hidden')" class="mt-8 w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold uppercase text-xs">Close</button>
         </div>
     </div>
 
     <script>
         const now = new Date();
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         
-        function getISOWeek(d) {
-            const date = new Date(d.getTime());
-            date.setHours(0,0,0,0);
-            date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-            const week1 = new Date(date.getFullYear(), 0, 4);
-            return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+        function getWK(d) {
+            const dt = new Date(d.getTime());
+            dt.setHours(0,0,0,0); dt.setDate(dt.getDate() + 3 - (dt.getDay() + 6) % 7);
+            const w1 = new Date(dt.getFullYear(), 0, 4);
+            return 1 + Math.round(((dt.getTime() - w1.getTime()) / 86400000 - 3 + (w1.getDay() + 6) % 7) / 7);
         }
 
-        const isLeap = (y) => (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
-        document.getElementById('week-number').innerText = getISOWeek(now);
+        const isL = (y) => (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+        document.getElementById('week-number').innerText = getWK(now);
         document.getElementById('day-number').innerText = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
-        document.getElementById('total-days-label').innerText = `/ ${isLeap(now.getFullYear()) ? 366 : 365}`;
+        document.getElementById('total-days-label').innerText = `/ ${isL(now.getFullYear()) ? 366 : 365}`;
 
-        function showScreen(type) {
+        function showScreen(mode) {
             const main = document.getElementById('main-screen');
             const scroll = document.getElementById('scroll-view');
             const container = document.getElementById('list-container');
             
-            if (type === 'main') {
-                main.classList.remove('hidden');
-                scroll.classList.add('hidden');
-                scroll.classList.add('opacity-0');
+            if (mode === 'main') {
+                main.classList.remove('hidden'); scroll.classList.add('hidden');
             } else {
-                main.classList.add('hidden');
-                scroll.classList.remove('hidden');
-                renderArchive(type);
+                main.classList.add('hidden'); scroll.classList.remove('hidden');
+                container.innerHTML = ''; // ČIŠTĚNÍ
+                render(mode);
+                const active = document.getElementById('active-item');
+                if (active) active.scrollIntoView({ block: 'center' });
                 
-                container.style.scrollBehavior = 'auto'; // Disable smooth for instant jump
-                const activeItem = document.getElementById('active-item');
-                if (activeItem) { activeItem.scrollIntoView({ block: 'center' }); }
-                
-                scroll.classList.remove('opacity-0');
-
                 document.getElementById('todayBtn').onclick = () => {
                     container.style.scrollBehavior = 'smooth';
-                    activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    active.scrollIntoView({ block: 'center' });
                     setTimeout(() => container.style.scrollBehavior = 'auto', 1000);
                 };
             }
         }
 
-        function renderArchive(type) {
+        function render(mode) {
             const container = document.getElementById('list-container');
-            const title = document.getElementById('view-title');
-            container.innerHTML = '';
-            let html = '';
-            if (type === 'week-screen') {
-                title.innerText = 'Week Archive';
-                for (let y = 2024; y <= 2028; y++) {
+            let h = '';
+            if (mode === 'week') {
+                document.getElementById('view-title').innerText = 'Week Archive';
+                for (let y = 2024; y <= 2027; y++) {
                     for (let m = 0; m < 12; m++) {
-                        html += `<div class="p-4 pt-8 text-center font-black text-sm uppercase tracking-widest text-zinc-600 border-t border-zinc-800">${monthNames[m]} ${y}</div><div class="grid grid-cols-8 gap-1 p-4 text-[9px] font-black text-center opacity-40"><div>MO</div><div>TU</div><div>WE</div><div>TH</div><div>FR</div><div>SA</div><div>SU</div><div class="text-indigo-400">WK</div></div><div class="grid grid-cols-8 gap-x-1 gap-y-2.5 p-4 pt-0 text-center text-xs">`;
-                        let firstDay = new Date(y, m, 1);
-                        let offset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-                        let lastDay = new Date(y, m + 1, 0);
-                        for (let i = offset - 1; i >= 0; i--) html += `<div class="py-2 text-zinc-800 opacity-20">${new Date(y, m, -i).getDate()}</div>`;
-                        for (let d = 1; d <= lastDay.getDate(); d++) {
-                            let curr = new Date(y, m, d);
-                            let isToday = curr.toDateString() === now.toDateString();
-                            html += `<div id="${isToday ? 'active-item' : ''}" class="py-2 flex items-center justify-center ${isToday ? 'bg-indigo-600 text-white rounded-xl font-bold shadow-lg' : 'text-zinc-300'}">${d}</div>`;
-                            if (curr.getDay() === 0 || d === lastDay.getDate()) {
-                                if (d === lastDay.getDate()) {
-                                    let fill = 7 - (curr.getDay() === 0 ? 7 : curr.getDay());
-                                    for(let f=1; f<=fill; f++) html += `<div class="py-2 text-zinc-800 opacity-20">${f}</div>`;
+                        h += `<div class="p-4 pt-8 text-center font-black text-sm uppercase tracking-widest text-slate-400 dark:text-zinc-600 border-t border-slate-100 dark:border-zinc-800">${months[m]} ${y}</div><div class="grid grid-cols-8 gap-1 p-4 text-[9px] font-black text-center opacity-40 dark:text-white"><div>MO</div><div>TU</div><div>WE</div><div>TH</div><div>FR</div><div>SA</div><div>SU</div><div class="text-indigo-500">WK</div></div><div class="grid grid-cols-8 gap-x-1 gap-y-2 p-4 pt-0 text-center text-xs">`;
+                        let f = new Date(y, m, 1), off = f.getDay() === 0 ? 6 : f.getDay() - 1, l = new Date(y, m + 1, 0);
+                        for (let i = off - 1; i >= 0; i--) h += `<div class="py-2 opacity-10 dark:text-white">${new Date(y, m, -i).getDate()}</div>`;
+                        for (let d = 1; d <= l.getDate(); d++) {
+                            let c = new Date(y, m, d), isT = c.toDateString() === now.toDateString();
+                            h += `<div id="${isT ? 'active-item' : ''}" class="py-2 flex items-center justify-center ${isT ? 'bg-indigo-600 text-white rounded-xl font-bold' : 'dark:text-zinc-300 text-slate-600'}">${d}</div>`;
+                            if (c.getDay() === 0 || d === l.getDate()) {
+                                if (d === l.getDate()) {
+                                    let fill = 7 - (c.getDay() === 0 ? 7 : c.getDay());
+                                    for(let f=1; f<=fill; f++) h += `<div class="py-2 opacity-10 dark:text-white">${f}</div>`;
                                 }
-                                html += `<div class="py-2 bg-zinc-800/40 text-indigo-400 font-bold rounded-xl flex items-center justify-center">${getISOWeek(curr)}</div>`;
+                                h += `<div class="py-2 bg-slate-100 dark:bg-zinc-800/40 text-indigo-500 font-bold rounded-xl flex items-center justify-center">${getWK(c)}</div>`;
                             }
                         }
-                        html += `</div>`;
+                        h += `</div>`;
                     }
                 }
             } else {
-                title.innerText = 'Day Archive';
+                document.getElementById('view-title').innerText = 'Day Archive';
                 for (let y = 2024; y <= 2027; y++) {
-                    const days = isLeap(y) ? 366 : 365;
+                    const days = isL(y) ? 366 : 365;
                     for (let i = 1; i <= days; i++) {
-                        let d = new Date(y, 0, i);
-                        let isToday = d.toDateString() === now.toDateString();
-                        html += `<div id="${isToday ? 'active-item' : ''}" class="flex items-center justify-between p-5 border-b border-zinc-800/50 ${isToday ? 'bg-emerald-500/10 text-emerald-500 font-bold border-l-4 border-emerald-500' : 'text-zinc-500'}"><div class="flex items-center gap-4"><span class="text-[10px] font-mono opacity-40">#${i}</span><span class="text-[10px] font-bold opacity-30 tracking-widest uppercase">${y}</span></div><div class="text-right uppercase tracking-tight font-bold text-xs">${d.getDate().toString().padStart(2, '0')} ${monthNames[d.getMonth()]} ${y}</div></div>`;
+                        let d = new Date(y, 0, i), isT = d.toDateString() === now.toDateString();
+                        h += `<div id="${isT ? 'active-item' : ''}" class="flex items-center justify-between p-5 border-b border-slate-50 dark:border-zinc-800/50 ${isT ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 font-bold border-l-4 border-emerald-500' : 'text-slate-400 dark:text-zinc-500'}"><div class="flex items-center gap-4"><span class="text-[10px] font-mono opacity-40">#${i}</span><span class="text-[10px] font-bold opacity-30 uppercase">${y}</span></div><div class="text-right uppercase tracking-tight font-bold text-xs">${d.getDate().toString().padStart(2, '0')} ${months[d.getMonth()]} ${y}</div></div>`;
                     }
                 }
             }
-            container.innerHTML = html;
+            container.innerHTML = h;
         }
 
-        function showPrivacy() { document.getElementById('privacy-modal').classList.remove('hidden'); }
-        function closePrivacy() { document.getElementById('privacy-modal').classList.add('hidden'); }
-
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); });
+        document.getElementById('themeToggle').onclick = () => {
+            const isD = document.documentElement.classList.toggle('dark');
+            document.getElementById('themeIcon').innerText = isD ? '☀️' : '🌙';
+        };
     </script>
 </body>
 </html>
