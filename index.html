@@ -27,14 +27,14 @@
     <div id="main-screen" class="max-w-md mx-auto px-6 pt-10 space-y-6">
         <header class="flex justify-between items-start mb-8">
             <div>
-                <h1 class="text-4xl font-black tracking-tighter not-italic">Weekify</h1>
+                <h1 class="text-4xl font-black tracking-tighter not-italic text-black dark:text-white uppercase">Weekify</h1>
                 <p class="text-indigo-500 font-bold text-xs uppercase tracking-widest mt-1 not-italic">Current week and day</p>
             </div>
             <button id="themeToggle" class="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-sm"><span id="themeIcon">☀️</span></button>
         </header>
         
         <div onclick="showScreen('week-screen')" class="card bg-zinc-900 p-8 rounded-4xl border border-zinc-800 cursor-pointer text-center relative overflow-hidden">
-            <p class="text-xs uppercase tracking-[0.2em] text-indigo-500 font-bold mb-4 not-italic text-center">Week of Year</p>
+            <p class="text-xs uppercase tracking-[0.2em] text-indigo-500 font-bold mb-4 not-italic text-center text-center">Week of Year</p>
             <div class="flex items-baseline justify-center gap-2">
                 <p id="week-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
                 <p class="text-2xl text-zinc-600 font-light not-italic">/ 52</p>
@@ -43,7 +43,7 @@
         </div>
 
         <div onclick="showScreen('day-screen')" class="card bg-zinc-900 p-8 rounded-4xl border border-zinc-800 cursor-pointer text-center relative overflow-hidden">
-            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-bold mb-4 not-italic text-center">Day of Year</p>
+            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-bold mb-4 not-italic text-center text-center">Day of Year</p>
             <div class="flex items-baseline justify-center gap-2">
                 <p id="day-number" class="text-8xl font-black tracking-tighter not-italic">--</p>
                 <p id="total-days-label" class="text-2xl text-zinc-600 font-light not-italic">/ 365</p>
@@ -51,25 +51,25 @@
             <span class="absolute bottom-6 right-8 text-zinc-800 text-xl font-bold">→</span>
         </div>
 
-        <div class="p-4 border border-dashed border-zinc-800 rounded-3xl text-center text-zinc-700 text-[10px] uppercase tracking-[0.3em]">
+        <div class="p-8 border border-dashed border-zinc-800 rounded-3xl text-center text-zinc-700 text-[10px] uppercase tracking-[0.3em] min-h-[120px] flex items-center justify-center">
             Advertisement Space
         </div>
 
-        <footer class="mt-12 pb-6 text-center">
+        <footer class="mt-8 pb-6 text-center">
             <button onclick="showPrivacy()" class="text-[10px] text-zinc-700 uppercase tracking-widest hover:text-zinc-500 transition-colors">
                 Privacy Policy
             </button>
         </footer>
     </div>
 
-    <div id="scroll-view" class="max-w-md mx-auto px-4 pt-8 pb-10 hidden opacity-0 transition-opacity duration-200">
+    <div id="scroll-view" class="max-w-md mx-auto px-4 pt-8 pb-10 hidden opacity-0">
         <div class="flex justify-between items-center mb-6">
             <button onclick="showScreen('main')" class="py-3 px-6 bg-zinc-900 rounded-2xl text-sm font-bold border border-zinc-800">← Back</button>
-            <button onclick="scrollToToday(true)" class="py-3 px-6 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform">Today</button>
+            <button id="todayBtn" class="py-3 px-6 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform">Today</button>
         </div>
         <div class="bg-zinc-900 rounded-[2.5rem] border border-zinc-800 overflow-hidden">
             <div class="p-6 border-b border-zinc-800 bg-zinc-800/30">
-                <h2 id="view-title" class="text-xl font-black tracking-tight uppercase not-italic">Archive</h2>
+                <h2 id="view-title" class="text-xl font-black tracking-tight uppercase not-italic italic">Archive</h2>
             </div>
             <div id="list-container" class="max-h-[75vh] overflow-y-auto no-scrollbar"></div>
         </div>
@@ -110,6 +110,7 @@
             const main = document.getElementById('main-screen');
             const scroll = document.getElementById('scroll-view');
             const container = document.getElementById('list-container');
+            
             if (type === 'main') {
                 main.classList.remove('hidden');
                 scroll.classList.add('hidden');
@@ -118,16 +119,24 @@
                 main.classList.add('hidden');
                 scroll.classList.remove('hidden');
                 renderArchive(type);
+                
+                // Disable smooth scroll for instant jump
                 container.style.scrollBehavior = 'auto';
+                
                 const activeItem = document.getElementById('active-item');
-                if (activeItem) activeItem.scrollIntoView({ block: 'center' });
-                setTimeout(() => { scroll.classList.remove('opacity-0'); container.style.scrollBehavior = 'smooth'; }, 50);
-            }
-        }
+                if (activeItem) {
+                    activeItem.scrollIntoView({ block: 'center' });
+                }
+                
+                // Set the Today button to use smooth scroll later
+                document.getElementById('todayBtn').onclick = () => {
+                    container.style.scrollBehavior = 'smooth';
+                    activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                };
 
-        function scrollToToday(smooth = true) {
-            const activeItem = document.getElementById('active-item');
-            if (activeItem) activeItem.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'center' });
+                // Instant reveal
+                scroll.classList.remove('opacity-0');
+            }
         }
 
         function renderArchive(type) {
@@ -137,7 +146,7 @@
             let html = '';
             if (type === 'week-screen') {
                 title.innerText = 'Week Archive';
-                for (let y = 2020; y <= 2035; y++) {
+                for (let y = 2024; y <= 2028; y++) {
                     for (let m = 0; m < 12; m++) {
                         html += `<div class="p-4 pt-8 text-center font-black text-sm uppercase tracking-widest text-zinc-600 border-t border-zinc-800">${monthNames[m]} ${y}</div><div class="grid grid-cols-8 gap-1 p-4 text-[9px] font-black text-center opacity-40"><div>MO</div><div>TU</div><div>WE</div><div>TH</div><div>FR</div><div>SA</div><div>SU</div><div class="text-indigo-400">WK</div></div><div class="grid grid-cols-8 gap-x-1 gap-y-2.5 p-4 pt-0 text-center text-xs">`;
                         let firstDay = new Date(y, m, 1);
@@ -178,8 +187,7 @@
 
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
+            document.documentElement.classList.toggle('dark');
         });
     </script>
 </body>
